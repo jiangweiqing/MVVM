@@ -10,7 +10,7 @@
 #import "ViewModel.h"
 #import <Masonry.h>
 #import <MJRefresh.h>
-@interface ViewController ()
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ViewModel *vm;
 
@@ -28,12 +28,6 @@
         make.edges.equalTo(self.view);
     }];
     self.vm = [[ViewModel alloc] initWithTableView:self.tableView];
-    self.tableView.delegate = self.vm;
-    self.tableView.dataSource = self.vm;
-    __weak typeof(self) weakSelf = self;
-    self.vm.dBlock = ^(id model){
-        [weakSelf dismissViewControllerAnimated:YES completion:nil];
-    };
 }
 - (void)loadData{
     [self.vm refreshDataCompletion:^{
@@ -55,6 +49,23 @@
         
     }];
 }
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.vm.dataArray.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
+    cell.textLabel.text = self.vm.dataArray[indexPath.row];
+    return cell;
+}
 - (void)dealloc{
     NSLog(@"____________DEALLOC______________");
 }
@@ -62,7 +73,8 @@
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor whiteColor];
-        
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
         _tableView.separatorColor = [UIColor whiteColor];
         _tableView.rowHeight = 50;
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];

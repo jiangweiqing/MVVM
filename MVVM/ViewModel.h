@@ -16,9 +16,11 @@ typedef void(^DidSelectBlock)(id model);
 @optional
 @end
 
-@interface ViewModel : NSObject <UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, copy) DidSelectBlock dBlock;
+@interface ViewModel : NSObject
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 - (instancetype) initWithTableView:(UITableView *)tableView;
+- (instancetype) initWithTableView:(UITableView *)tableView modelClass:(NSString *)className;
 - (void)refreshDataCompletion:(void(^)(void))completion failure:(void(^)(NSInteger  errorCode))failure;
 - (void)loadMoreDataCompletion:(void(^)(BOOL scuess))completion failure:(void(^)(NSInteger  errorCode))failure;
 @end

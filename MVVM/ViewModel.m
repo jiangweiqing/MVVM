@@ -13,9 +13,9 @@
     NSInteger _pageSize;
     UITableView *_tableView;
     NSInteger _totalCount;
+    NSString *_modelClass;
 }
 
-@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -28,9 +28,23 @@
     }
     return self;
 }
+- (instancetype)initWithTableView:(UITableView *)tableView modelClass:(NSString *)className{
+    if (self = [super init]) {
+        _tableView = tableView;
+        _pageSize = 20;
+        _pageNumber = 1;
+        _modelClass = className;
+    }
+    return self;
+}
+#pragma mark 数据类型model
+- (Class)getClass{
+    return NSClassFromString(_modelClass);
+}
 - (void)loadDataWithPage:(NSInteger)page completion:(void(^)(NSDictionary *dic))completion failer:(void(^)(NSInteger errorCode))failure{
     sleep(2);
     BOOL load = YES;
+#pragma
     if (load) {
         if (completion) {
 //            _totalCount = [dic[@"count"] integerValue];数据列表中的totalCount
@@ -78,30 +92,6 @@
         }
     }];
 }
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataArray.count;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0.1;
-}
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
-        cell.textLabel.textColor = [UIColor blackColor];
-    }
-    cell.textLabel.text = self.dataArray[indexPath.row];
-    return cell;
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"____tabeviewDidSelect_____");
-    if (self.dBlock) {
-        self.dBlock(self.dataArray[indexPath.row]);
-    }
-}
-
 - (NSMutableArray *)dataArray{
     if (!_dataArray) {
         _dataArray = [NSMutableArray arrayWithCapacity:20];
@@ -112,10 +102,4 @@
     }
     return _dataArray;
 }
-- (void)setDBlock:(DidSelectBlock)dBlock{
-    if (!_dBlock) {
-        _dBlock = [dBlock copy];
-    }
-}
-
 @end
