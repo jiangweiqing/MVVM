@@ -22,6 +22,7 @@
     [super viewDidLoad];
     [self addTableView];
 }
+
 - (void)addTableView{
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -29,6 +30,7 @@
     }];
     self.vm = [[ViewModel alloc] initWithTableView:self.tableView];
 }
+
 - (void)loadData{
     [self.vm refreshDataCompletion:^{
         NSLog(@"########刷新完成########");
@@ -38,6 +40,7 @@
         
     }];
 }
+
 - (void)loadMoreData{
     [self.vm loadMoreDataCompletion:^(BOOL scuess) {
         if (scuess) {
@@ -49,12 +52,15 @@
         
     }];
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.vm.dataArray.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
@@ -66,9 +72,11 @@
     cell.textLabel.text = self.vm.dataArray[indexPath.row];
     return cell;
 }
+
 - (void)dealloc{
     NSLog(@"____________DEALLOC______________");
 }
+
 - (UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -82,10 +90,10 @@
     }
     return _tableView;
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 @end

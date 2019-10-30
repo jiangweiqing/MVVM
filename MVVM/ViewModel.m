@@ -20,6 +20,7 @@
 @end
 
 @implementation ViewModel
+
 - (instancetype)initWithTableView:(UITableView *)tableView{
     if (self = [super init]) {
         _tableView = tableView;
@@ -28,6 +29,7 @@
     }
     return self;
 }
+
 - (instancetype)initWithTableView:(UITableView *)tableView modelClass:(NSString *)className{
     if (self = [super init]) {
         _tableView = tableView;
@@ -37,10 +39,12 @@
     }
     return self;
 }
+
 #pragma mark 数据类型model
 - (Class)getClass{
     return NSClassFromString(_modelClass);
 }
+
 - (void)loadDataWithPage:(NSInteger)page completion:(void(^)(NSDictionary *dic))completion failer:(void(^)(NSInteger errorCode))failure{
     sleep(2);
     BOOL load = YES;
@@ -56,6 +60,7 @@
         }
     }
 }
+
 - (void)refreshDataCompletion:(void (^)(void))completion failure:(void (^)(NSInteger))failure{
     NSInteger page = 1;
     [self loadDataWithPage:page completion:^(NSDictionary *dic) {
@@ -71,6 +76,7 @@
         }
     }];
 }
+
 - (void)loadMoreDataCompletion:(void (^)(BOOL))completion failure:(void (^)(NSInteger))failure{
     NSInteger page = _pageNumber + 1;
     [self loadDataWithPage:page completion:^(NSDictionary *dic) {
@@ -92,6 +98,7 @@
         }
     }];
 }
+
 - (NSMutableArray *)dataArray{
     if (!_dataArray) {
         _dataArray = [NSMutableArray arrayWithCapacity:20];
@@ -102,4 +109,5 @@
     }
     return _dataArray;
 }
+
 @end

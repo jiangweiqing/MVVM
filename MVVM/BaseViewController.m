@@ -27,10 +27,12 @@
     btn.frame = CGRectMake(100, 300, 80, 80);
     [self.view addSubview:btn];
 }
+
 - (void)btnClick{
     ViewController *vc = [[ViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
 }
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
  
 }
